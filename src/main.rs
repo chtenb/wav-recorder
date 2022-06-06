@@ -19,7 +19,7 @@ mod record;
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    /// Optionally specify a different output directory than the current working directory
+    /// Specify the output directory of the recordings
     #[clap(short, long, default_value("."))]
     output_dir: String,
     /// Specify the device to record from by index or by name

@@ -11,11 +11,9 @@ USAGE:
     record.exe [OPTIONS] <SUBCOMMAND>
 
 OPTIONS:
-    -d, --device <DEVICE>            Specify the device to record from by index or by name [default:
-                                     default]
+    -d, --device <DEVICE>            Specify the device to record from by index or by name [default: default]
     -h, --help                       Print help information
-    -o, --output-dir <OUTPUT_DIR>    Optionally specify a different output directory than the
-                                     current working directory [default: .]
+    -o, --output-dir <OUTPUT_DIR>    Specify the output directory of the recordings [default: .]    
     -V, --version                    Print version information
 
 SUBCOMMANDS:
