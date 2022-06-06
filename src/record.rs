@@ -1,6 +1,3 @@
-//! Records a WAV file (roughly 3 seconds long) using the default input device and config.
-//!
-//! The input data is recorded to "$CARGO_MANIFEST_DIR/recorded.wav".
 extern crate anyhow;
 extern crate clap;
 extern crate cpal;
@@ -76,7 +73,7 @@ lazy_static! {
 fn determine_filename() -> String {
     let paths = std::fs::read_dir("./").unwrap();
 
-    let mut max_number: i32 = 1;
+    let mut max_number: i32 = 0;
 
     for path in paths {
         let filename_os = path.unwrap().file_name();
