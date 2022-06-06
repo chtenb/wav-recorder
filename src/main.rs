@@ -39,6 +39,8 @@ enum Command {
 
 fn main() {
     let args = Args::parse();
+    resolve_output_dir(&args.output_dir);
+
     match run_command(args) {
         Err(e) => panic!("{}", e),
         Ok(()) => std::process::exit(0),

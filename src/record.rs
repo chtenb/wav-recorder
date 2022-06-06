@@ -109,25 +109,12 @@ fn ui<B: Backend>(f: &mut Frame<B>, filename: &str, device_name: &str, messages:
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(2)
-        .constraints([Constraint::Length(4), Constraint::Length(3), Constraint::Min(3)].as_ref())
+        .constraints([Constraint::Length(4), Constraint::Length(4), Constraint::Min(3)].as_ref())
         .split(f.size());
 
     render_help(f, chunks[0]);
     render_status(f, chunks[1], filename, device_name);
     render_messages(f, chunks[2], messages);
-}
-
-fn render_status<B: Backend>(f: &mut Frame<B>, rect: Rect, filename: &str, device_name: &str) {
-    let lines = vec![Spans::from(vec![
-        Span::raw("Recording from device "),
-        Span::styled(device_name, Style::default().fg(Color::Red)),
-        Span::raw(" to file "),
-        Span::styled(filename, Style::default().fg(Color::Red)),
-    ])];
-    f.render_widget(
-        Paragraph::new(Text::from(lines)).block(Block::default().title("STATUS").borders(Borders::ALL)),
-        rect,
-    );
 }
 
 fn render_help<B: Backend>(f: &mut Frame<B>, rect: Rect) {
@@ -138,22 +125,43 @@ fn render_help<B: Backend>(f: &mut Frame<B>, rect: Rect) {
         ]),
         Spans::from(vec![
             Span::styled("Backspace", Style::default().fg(Color::Red)),
-            Span::raw(" to start a new recording and delete the current recording\n"),
+            Span::raw(" to start a new recording and delete the current recording"),
         ]),
         Spans::from(vec![
             Span::styled("q", Style::default().fg(Color::Red)),
-            Span::raw(" to stop the recording and quit the application\n"),
+            Span::raw(" to stop the recording and quit the application"),
         ]),
         Spans::from(vec![
             Span::styled("Q", Style::default().fg(Color::Red)),
-            Span::raw(" to delete the current recording and quit the application\n"),
+            Span::raw(" to delete the current recording and quit the application"),
         ]),
     ];
     f.render_widget(Paragraph::new(Text::from(lines)), rect);
 }
 
+fn render_status<B: Backend>(f: &mut Frame<B>, rect: Rect, filename: &str, device_name: &str) {
+    let working_dir_os = std::env::current_dir().unwrap();
+    let working_dir = working_dir_os.to_str().unwrap();
+    let lines = vec![
+        Spans::from(vec![
+            Span::raw("Working directory: "),
+            Span::styled(working_dir, Style::default().fg(Color::Red)),
+        ]),
+        Spans::from(vec![
+            Span::raw("Recording from device "),
+            Span::styled(device_name, Style::default().fg(Color::Red)),
+            Span::raw(" to file "),
+            Span::styled(filename, Style::default().fg(Color::Red)),
+        ]),
+    ];
+    f.render_widget(
+        Paragraph::new(Text::from(lines)).block(Block::default().title("STATUS").borders(Borders::ALL)),
+        rect,
+    );
+}
+
 fn render_messages<B: Backend>(f: &mut Frame<B>, rect: Rect, messages: &Vec<String>) {
-    let lines: Vec<Spans> = messages.iter().map(|msg| Spans::from(Span::raw(msg))).collect();
+    let lines: Vec<Spans> = messages.iter().rev().map(|msg| Spans::from(Span::raw(msg))).collect();
     f.render_widget(
         Paragraph::new(Text::from(lines)).block(Block::default().title("MESSAGES").borders(Borders::ALL)),
         rect,
